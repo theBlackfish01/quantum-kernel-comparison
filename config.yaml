@@ -1,0 +1,21 @@
+data:
+  type: "moons" # Options: double_cake, moons, digits
+  num_sectors: 3
+  test_size: 0.3
+  n_samples: 40
+  random_state: 42
+  use_scaler: false
+
+model:
+  type: "quantum_kernel"
+  wires: 5
+  layers: 6
+  dev_name: "default.qubit" # Options: default.qubit, qiskit.aer
+
+optimization:
+  optimize_kernel: true
+  steps: 15
+  learning_rate: 0.2
+
+training:
+  type: "svc"

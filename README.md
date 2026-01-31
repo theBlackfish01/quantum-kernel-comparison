@@ -1,9 +1,61 @@
-A sample dataset is generated with data points that are arranged in concentric circles and therefore are unable to be effectively separated linearly.
-We define a Quantum Embedding Kernel using Pennylane’s kernels modules, with random parameters. Using this output, an SVC is applied and the accuracy is measured.
-The next step is to apply standard kernels to the original dataset. These kernels are of linear, polynomial, and radial basis function form. As before, they are passed to an SVC and the accuracy is measured.
+# Deep Quantum Kernel Learning
 
-The data generation and processing was conducted in Python.
-Quantum kernelling used Pennylane. 
-The SVC algorithm was from scikit-learn. 
-NumPy was used for data processing and Matplotlib was used for plotting the data.
-Code for Quantum kernelling was adapted from a Pennylane tutorial.
+A modular research framework for **Deep Quantum Kernel Learning (DKL)**. This project explores how **trainable** quantum kernels can outperform static ones by optimizing the data embedding to maximize class separability (Kernel-Target Alignment).
+
+## Key Features
+
+1.  **Deep Kernel Learning**: Implements a generic optimization loop that trains the parameters of the Quantum Ansatz via Gradient Descent (maximizing alignment) *before* the SVM classification step.
+2.  **Hybrid Backends**: Run on PennyLane's `default.qubit` or integrate with **Qiskit** (`qiskit.aer`).
+3.  **Real-World Data**: Support for synthetic (`Double Cake`, `Moons`) and real-world (`MNIST` Digits) datasets, with automatic PCA dimensionality reduction.
+4.  **Modular Architecture**: Clean separation of `Data`, `Models`, `Training`, and `Evaluation`.
+
+## Project Structure
+
+```text
+├── config.yaml             # Experiment configuration
+├── config_qiskit.yaml      # Qiskit backend configuration
+├── main.py                 # Entry point
+├── src/
+│   ├── data/               # Loaders for Moons, Digits, etc.
+│   ├── models/             # Trainable Quantum Kernels
+│   ├── training/           # KernelOptimizer & SVCTrainer
+│   └── evaluation/         # KTA Metrics & Plotting
+```
+
+## Installation
+
+```bash
+pip install pennylane scikit-learn matplotlib pyyaml qiskit pennylane-qiskit
+```
+
+## Usage
+
+**1. Standard Benchmark (Deep Kernel Learning on Moons):**
+```bash
+python main.py
+```
+*Output*: Trains the kernel (increasing alignment from ~0.32 to ~0.35) and achieves high classification accuracy.
+
+**2. Using Qiskit Backend:**
+```bash
+python main.py --config config_qiskit.yaml
+```
+
+## Configuration (`config.yaml`)
+
+Control the experiment without changing code:
+
+```yaml
+data:
+  type: "moons"        # Options: double_cake, moons, digits
+  n_samples: 40        # Sample size
+  
+model:
+  type: "quantum_kernel"
+  dev_name: "default.qubit"  # or "qiskit.aer"
+
+optimization:
+  optimize_kernel: true      # Enable Deep Kernel Learning
+  steps: 15
+  learning_rate: 0.2
+```

@@ -1,0 +1,21 @@
+data:
+  type: "moons"
+  num_sectors: 3
+  test_size: 0.3
+  n_samples: 40
+  random_state: 42
+  use_scaler: false
+
+model:
+  type: "quantum_kernel"
+  wires: 5
+  layers: 6
+  dev_name: "qiskit.aer" # Testing Qiskit
+
+optimization:
+  optimize_kernel: false
+  steps: 5
+  learning_rate: 0.2
+
+training:
+  type: "svc"
